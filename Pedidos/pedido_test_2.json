@@ -1,0 +1,29 @@
+[
+  {
+    "pedido_id": "P008",
+    "fecha": "2024-09-18",
+    "cliente": {
+      "cliente_id": "T002",
+      "nombre": "Farmacia Sol",
+      "tipo": "farmacia"
+    },
+    "productos": [
+      {
+        "codigo": "F010",
+        "nombre": "Omeprazol 20mg",
+        "categoria": "gastroprotector",
+        "unidades": 120,
+        "precio_unitario": 0.25,
+        "caducidad": "2025-10-01"
+      },
+      {
+        "codigo": "F017",
+        "nombre": "Loratadina 10mg",
+        "categoria": "antihistamínico",
+        "unidades": 70,
+        "precio_unitario": 0.22,
+        "caducidad": "2025-07-15"
+      }
+    ]
+  }
+]

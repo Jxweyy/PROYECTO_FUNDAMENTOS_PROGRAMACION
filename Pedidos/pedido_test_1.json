@@ -1,0 +1,37 @@
+[
+  {
+    "pedido_id": "P007",
+    "fecha": "2024-09-17",
+    "cliente": {
+      "cliente_id": "T001",
+      "nombre": "Clínica Norte",
+      "tipo": "hospital"
+    },
+    "productos": [
+      {
+        "codigo": "F001",
+        "nombre": "Paracetamol 500mg",
+        "categoria": "analgésico",
+        "unidades": 60,
+        "precio_unitario": 0.15,
+        "caducidad": "2025-05-01"
+      },
+      {
+        "codigo": "F002",
+        "nombre": "Ibuprofeno 400mg",
+        "categoria": "antiinflamatorio",
+        "unidades": 45,
+        "precio_unitario": 0.2,
+        "caducidad": "2024-11-20"
+      },
+      {
+        "codigo": "F099",
+        "nombre": "Producto de prueba",
+        "categoria": "misc",
+        "unidades": 25,
+        "precio_unitario": 0.1,
+        "caducidad": "2026-01-01"
+      }
+    ]
+  }
+]

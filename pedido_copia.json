@@ -1,0 +1,66 @@
+[
+  {
+    "pedido_id": "P001",
+    "fecha": "2024-09-15",
+    "cliente": {
+      "cliente_id": "C001",
+      "nombre": "Farmacia Central",
+      "tipo": "farmacia"
+    },
+    "productos": [
+      {
+        "codigo": "F001",
+        "nombre": "Paracetamol 500mg",
+        "categoria": "analgésico",
+        "unidades": 100,
+        "precio_unitario": 0.15,
+        "caducidad": "2025-05-01"
+      },
+      {
+        "codigo": "F002",
+        "nombre": "Ibuprofeno 400mg",
+        "categoria": "antiinflamatorio",
+        "unidades": 50,
+        "precio_unitario": 0.20,
+        "caducidad": "2024-11-20"
+      }
+    ]
+  },
+  {
+    "pedido_id": "P002",
+    "fecha": "2024-09-16",
+    "cliente": {
+      "cliente_id": "C002",
+      "nombre": "Hospital San Pedro",
+      "tipo": "hospital"
+    },
+    "productos": [
+      {
+        "codigo": "F003",
+        "nombre": "Amoxicilina 500mg",
+        "categoria": "antibiótico",
+        "unidades": 200,
+        "precio_unitario": 0.30,
+        "caducidad": "2025-01-10"
+      }
+    ]
+  },
+  {
+    "pedido_id": "P003",
+    "fecha": "2024-09-16",
+    "cliente": {
+      "cliente_id": "C003",
+      "nombre": "Farmacia López",
+      "tipo": "farmacia"
+    },
+    "productos": [
+      {
+        "codigo": "F001",
+        "nombre": "Paracetamol 500mg",
+        "categoria": "analgésico",
+        "unidades": 150,
+        "precio_unitario": 0.15,
+        "caducidad": "2025-05-01"
+      }
+    ]
+  }]
