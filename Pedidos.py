@@ -95,8 +95,7 @@ def cargar_pedido_nuevo(ruta):
             print(f'Pedido {pedido_nuevo[n]['pedido_id']} ya está añadido a no procesados.')
 
 
-
-# cargar_pedido_nuevo('Pedidos\pedido_test_3.json')
+# cargar_pedido_nuevo('Pedidos\pedido_test_1.json')
 
 
 #########################################
@@ -162,7 +161,7 @@ def leer_pedido_y_verificar_stock(pedido_id):
         else:
                 lista_productos_pedir.append(producto)
                 lista_cantidades_pedir.append(productos_cantidades_pedido[producto])
-                print(f'No hay existencias de {producto}')
+                print(f'No hay existencias de {producto} en almacén')
 
 
     productos_cantidades_enviar = dict(zip(lista_productos_enviar,lista_cantidades_enviar))
@@ -171,7 +170,7 @@ def leer_pedido_y_verificar_stock(pedido_id):
     print(productos_cantidades_pedir)
     return dave, productos_cantidades_enviar
 
-leer_pedido_y_verificar_stock('P002')
+# leer_pedido_y_verificar_stock('P002')
 
 
 
@@ -266,3 +265,31 @@ def planificar_envio(pedido_id, dave):
     return envio
 
 # planificar_envio('P001', "A")
+
+
+
+# PROCESAR UN PEDIDO
+def procesar_pedidoooooooooooo(pedido_id):
+
+    dave, productos_cantidades_enviar = leer_pedido_y_verificar_stock(pedido_id)
+    envio_almacen = dave[0]
+    pedir_fabrica = dave[1]
+
+    print("ENVIAR DESDE EL ALMACÉN: ", envio_almacen)
+    print("PEDIR A FÁBRICA: ", pedir_fabrica)
+
+    #llamamos a la funcion planificar envio
+    envio = planificar_envio(pedido_id, dave)
+
+    #llamamos a actualizar almacen
+    actualizar_almacén(pedido_id, productos_cantidades_enviar)
+    print("EL PEDIDO HA SIDO PROCESADO")
+    return envio
+
+# if __name__ == "__main__":
+   
+#     print("Procesando pedido P001...\n")
+#     resultado = procesar_pedido("P001")
+
+#     print("\n--- RESULTADO FINAL ---")
+#     print(json.dumps(resultado, indent=2, ensure_ascii=False))
