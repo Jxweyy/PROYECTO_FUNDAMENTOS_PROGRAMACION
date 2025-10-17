@@ -1,56 +1,56 @@
 {
-    "almacen": {
-        "MOD001": {
-            "capacidad_maxima": 100,
-            "temperatura": -70.0,
-            "stock": {
-                "F001": 0,
-                "F023": 10,
-                "F021": 5
-            }
-        },
-        "MOD002": {
-            "capacidad_maxima": 150,
-            "temperatura": -20.0,
-            "stock": {
-                "F024": 50,
-                "F002": 0,
-                "F025": 20
-            }
-        },
-        "MOD003": {
-            "capacidad_maxima": 200,
-            "temperatura": 5.0,
-            "stock": {
-                "F010": 80,
-                "F008": 60,
-                "F005": 40
-            }
-        },
-        "MOD004": {
-            "capacidad_maxima": 300,
-            "temperatura": 22.0,
-            "stock": {
-                "F004": 120,
-                "F014": 60,
-                "F015": 40
-            }
-        },
-        "MOD005": {
-            "capacidad_maxima": 180,
-            "temperatura": 5.0,
-            "stock": {
-                "F016": 50,
-                "F020": 30
-            }
-        },
-        "MOD006": {
-            "capacidad_maxima": 250,
-            "temperatura": 22.0,
-            "stock": {
-                "F017": 70,
-                "F012": 90
-            }
-        }
+  "almacen": {
+    "MOD001": {
+      "capacidad_maxima": 100,
+      "temperatura": -70.0,
+      "stock": {
+        "F001": 25,
+        "F023": 10,
+        "F021": 5 
+      }
+    },
+    "MOD002": {
+      "capacidad_maxima": 150,
+      "temperatura": -20.0,
+      "stock": {
+        "F024": 50,
+        "F002": 30,
+        "F025": 20
+      }
+    },
+    "MOD003": {
+      "capacidad_maxima": 200,
+      "temperatura": 5.0,
+      "stock": {
+        "F010": 80,
+        "F008": 60,
+        "F005": 40
+      }
+    },
+    "MOD004": {
+      "capacidad_maxima": 300,
+      "temperatura": 22.0,
+      "stock": {
+        "F004": 120,
+        "F014": 60,
+        "F015": 40
+      }
+    },
+    "MOD005": {
+      "capacidad_maxima": 180,
+      "temperatura": 5.0,
+      "stock": {
+        "F016": 50,
+        "F020": 30
+      }
+    },
+    "MOD006": {
+      "capacidad_maxima": 250,
+      "temperatura": 22.0,
+      "stock": {
+        "F017": 70,
+        "F012": 90
+      }
     }
+  }
 }

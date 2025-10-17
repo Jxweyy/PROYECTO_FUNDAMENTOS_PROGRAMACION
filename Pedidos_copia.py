@@ -241,7 +241,16 @@ def procesar_pedido(pedido_id):
 
 
 
-### PLANIFICAR ENVÍO:
+### PLANIFICAR ENVÍO: Cargamos el archivo de envíos, el archivo de pedidos y pedimos las listas con los productos
+### a envíar y pedir del pedido_id. Creamos un diccionario que empieza poniendo el pedido_id que se está planificando
+### y otro diccionario datos donde irán las partes de los envíos.
+### Recorremos todos los pedidos en pedidos.json y cuando coincida con el que hemos dado guardamos su fecha en una variable,
+### en caso de no haber fecha cogemos la de hoy (evitamos error).
+### Si hay objetos en la lista de pedir a fábrica (len > 0), añadimos una parte llamada fábrica y ponemos la fecha de pedido,
+### la de envío (+10 días) y ponemos la lista de las cantidades a pedir. (PRODUCTOS QUE PEDIMOS)
+### Si hay objetos en la lista de enviar ya (len > 0), añadimos una parte llamada stock y ponemos la fecha de pedido,
+### la de envío (+3 días) y ponemos la lista de las cantidades a enviar. (PRODUCTOS QUE TENEMOS Y ENVIAMOS).
+### Finalmente dumpeamos en nuestro .json de pedidos
 
 def planificar_envio(pedido_id):
 
@@ -285,7 +294,6 @@ def planificar_envio(pedido_id):
             "fecha_envio": fecha_envio.strftime("%Y-%m-%d"),
             "envio_stock": productos_cantidades_enviar}
     # strftime("%Y-%m-%d") porque si no no se puede meter a .json
-    archivo_envio = f"Envios_envio_{pedido_id}.json"
 
     envios_archivo.append(envio)
 
