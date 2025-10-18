@@ -176,7 +176,7 @@ def leer_pedido_y_verificar_stock(pedido_id):
         else:
                 lista_productos_pedir.append(producto)
                 lista_cantidades_pedir.append(productos_cantidades_pedido[producto])
-                print(f'No hay existencias de {producto}')
+                print(f'No hay existencias de {producto}. Pedimos {productos_cantidades_pedido[producto]}.')
 
 
     productos_cantidades_enviar = dict(zip(lista_productos_enviar,lista_cantidades_enviar))
@@ -186,14 +186,13 @@ def leer_pedido_y_verificar_stock(pedido_id):
 
 
 
-### ACTUALIZAR ALMACÉN: La función resta todo lo que hemos enviado desde almacén. Primero cargamos las cantidades
+### ACTUALIZAR ALMACÉN RESTAR: La función resta todo lo que hemos enviado desde almacén. Primero cargamos las cantidades
 ### de almacén, el diccionario de productos a enviar y el almacen_completo (el .json inicial). Para cada producto
 ### en la lista de enviar, si este está en la lista almacén actualizamos la cantidad.
 ### Después, en el almacén completo recorremos cada módulo y su stock, y si este coincide con algún producto
 ### de los que enviamos, actualizamos su valor por el actualizado calculado antes, y printeamos el estado.
-### Finalmente actualizamos el .json.
 
-def actualizar_almacén(pedido_id):
+def actualizar_almacén_restar(pedido_id):
 
     almacen = productos_cantidades_almacen()
     productos_cantidades_enviar, productos_cantidades_pedir = leer_pedido_y_verificar_stock(pedido_id)
@@ -214,7 +213,97 @@ def actualizar_almacén(pedido_id):
                         almacen_completo['almacen'][i]['stock'][j] = almacen[k]
                         print(f'El producto {j} viene del modulo: {i} y tras el envío quedan {almacen_completo['almacen'][i]["stock"]} unidades')
 
-    dump_json('almacen.json', almacen_completo)                
+    dump_json('almacen.json', almacen_completo)
+
+    return almacen_completo, productos_cantidades_pedir
+
+
+
+
+### FÁRMACOS TEMPERATURA: Recorremos todos los productos de fármacos y sus temperaturas, las metemos cada una a
+### una lista y posteriormente las unimos en un diccionario.
+
+def farmacos_temperatura():
+
+    farmacos = cargar_json('farmacos.json')
+
+    lista_farmacos = []
+
+    lista_farmacos_temperatura = []
+
+
+    for i in farmacos.keys():
+        for j in farmacos[i].keys():
+            lista_farmacos.append(i)
+            lista_farmacos_temperatura.append(farmacos[i]['temperatura_requerida'])
+
+    farmacos_temperatura = dict(zip(lista_farmacos, lista_farmacos_temperatura))
+
+    return farmacos_temperatura
+
+
+
+### ACTUALIZAR ALMACÉN SUMAR RESTAR: Cargamos cantidades almacén y temperaturas fármacos, también el almacén completo y el
+### diccionario de productos a pedir (proveniente de función de almacén restar, que de paso resta la cantidad que enviamos de almacén). ç
+### Recorremos los productos a pedir y los fármacos, si coinciden, guardamos la cantidad a pedir extra
+### para almacén, el producto que es y su temperatura. Posteriormente, recorremos todos los módulos, y si la temperatura
+### coincide con la requerida, calculamos el espacio total, el actual para ver cuantos productos caben:
+### - Si el espacio del módulo es 0, entonces vamos al siguiente.
+### - Si el espacio es mayor a lo que pedimos, es que entra todo así que entra todo a ese módulo.
+### - Si el espacio es menor a lo que pedimos, entra la cantidad que haya restante (espacio disponible), y se continua al siguiente
+### módulo compatible.
+### Finalmente si esa cantidad restante no ha entrado en ninguno de los módulos, se printea y finalmente se hace dump.
+
+def actualizar_almacén_sumar_restar(pedido_id):
+
+    farmacos_temp = farmacos_temperatura()
+    x, productos_cantidades_pedir = actualizar_almacén_restar(pedido_id)
+    # restamos primero las cantidades que tenemos y enviamos.
+    almacen_completo = cargar_json('almacen.json')
+    # aquí cogemos la lista de productos a pedir (leer_y_verificar stock dentro de esta), y la lista de productos a pedir.
+    # importante tener cargar el almacén luego porque si no no tenemos el restado
+    for i in productos_cantidades_pedir:
+        for j in farmacos_temp:
+            if i == j:
+                cantidad_almacén_extra = int(productos_cantidades_pedir[i] * 0.10) # pedimos un 10% más de lo que tenemos que pedir
+                print(f'Añadimos {cantidad_almacén_extra} extra de {i} para nuestro almacén.')
+                producto = i
+                temperatura = farmacos_temp[j]
+                for k in almacen_completo['almacen'].keys():
+                    if almacen_completo['almacen'][k]['temperatura'] == temperatura:
+
+                        capacidad_maxima = almacen_completo['almacen'][k]['capacidad_maxima']
+                        capacidad_actual = sum(almacen_completo['almacen'][k]['stock'].values())
+                        espacio_disponible = capacidad_maxima - capacidad_actual
+
+                        if espacio_disponible <= 0:
+                            print(f'Capacidad del módulo {k} llena. Pasando al siguiente compatible.')
+                            continue
+                            # Módulo lleno: por tanto pasamos al siguiente
+
+                        if espacio_disponible >= cantidad_almacén_extra:
+                            stock_actual = almacen_completo['almacen'][k]['stock'].get(producto, 0)
+                            # get para que si no existe, lo añada al diccionario con valor 0, si no nos da error
+                            almacen_completo['almacen'][k]['stock'][producto] = stock_actual + cantidad_almacén_extra
+                            print(f'Añadido {cantidad_almacén_extra} unidades de {producto} a módulo {k}. Estado: {almacen_completo['almacen'][k]["stock"]}')
+                            cantidad_almacén_extra = 0
+                            break
+                            # ya hemos metido todos los productosç
+                                                   
+                        elif espacio_disponible <= cantidad_almacén_extra:
+                            stock_actual = almacen_completo['almacen'][k]['stock'].get(producto, 0)
+                            # get para que si no existe, lo añada al diccionario con valor 0, si no nos da error
+                            almacen_completo['almacen'][k]['stock'][producto] = stock_actual + espacio_disponible
+                            # espacio disponible es la cantidad que podemos añadir sin sobrepasar el tope
+                            cantidad_almacén_extra = cantidad_almacén_extra - espacio_disponible
+                            # cantidad restante despúes de haber metido todo lo que podiamos al MOD, continua al siguiente
+                            print(f'Añadido {espacio_disponible} unidades de {producto} a módulo {k}. Quedan {cantidad_almacén_extra} por añadir. Estado: {almacen_completo['almacen'][k]["stock"]}  Modulo lleno. Siguiente.')
+                            continue
+
+                if cantidad_almacén_extra > 0:
+                        print(f'Quedan {cantidad_almacén_extra} de {producto} por añadir. Todos los módulos llenos.')
+
+    dump_json('almacen.json', almacen_completo)
 
 
 
@@ -293,4 +382,3 @@ def planificar_envio(pedido_id):
 
     return envio
 
-planificar_envio('P001')
